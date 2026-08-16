@@ -1,5 +1,7 @@
 # TaskFlow
 
+Live URL: https://taskflow-todo-sage.vercel.app/
+
 Take-home assignment submission - a small Trello-style task board.
 
 Board → Columns → Tasks. You can create/edit/delete tasks, move them between
@@ -36,6 +38,7 @@ taskflow/
 Needs Node 18+.
 
 **Backend:**
+
 ```bash
 cd backend
 npm install
@@ -44,6 +47,7 @@ npm run dev        # http://localhost:4000
 ```
 
 **Frontend** (separate terminal):
+
 ```bash
 cd frontend
 npm install
@@ -54,10 +58,12 @@ Open `http://localhost:5173`. Vite proxies `/api/*` to the backend in dev
 (see `vite.config.js`) so nothing else needs configuring.
 
 **Tests:**
+
 ```bash
 cd backend
 npm test
 ```
+
 Uses a separate `tests/test.db` file so it never touches your real db.
 
 ## Data model
@@ -103,6 +109,7 @@ Both live in `backend/src/queries.js`, actual SQL, not "get everything and
 filter in JS":
 
 **Task count per column** (LEFT JOIN so an empty column still shows 0):
+
 ```sql
 SELECT c.id AS column_id, c.name AS column_name, c.position, COUNT(t.id) AS task_count
 FROM columns c
@@ -113,6 +120,7 @@ ORDER BY c.position ASC;
 ```
 
 **Tasks by priority, newest first:**
+
 ```sql
 SELECT t.id, t.title, t.description, t.priority, t.created_at, t.column_id, c.name AS column_name
 FROM tasks t
@@ -127,15 +135,15 @@ if you want to hit it directly.
 
 ## API
 
-| Method | Route | What it does |
-|---|---|---|
-| GET | `/api/board` | Full board with columns + tasks (`?priority=High` to filter) |
-| GET | `/api/columns/counts` | Query 1 - task count per column |
-| GET | `/api/tasks/by-priority/:priority` | Query 2 - tasks by priority, newest first |
-| POST | `/api/tasks` | Create a task (title required, validated server-side) |
-| PUT | `/api/tasks/:id` | Edit title/description/priority |
-| PATCH | `/api/tasks/:id/move` | Move a task to a different column |
-| DELETE | `/api/tasks/:id` | Delete a task |
+| Method | Route                              | What it does                                                 |
+| ------ | ---------------------------------- | ------------------------------------------------------------ |
+| GET    | `/api/board`                       | Full board with columns + tasks (`?priority=High` to filter) |
+| GET    | `/api/columns/counts`              | Query 1 - task count per column                              |
+| GET    | `/api/tasks/by-priority/:priority` | Query 2 - tasks by priority, newest first                    |
+| POST   | `/api/tasks`                       | Create a task (title required, validated server-side)        |
+| PUT    | `/api/tasks/:id`                   | Edit title/description/priority                              |
+| PATCH  | `/api/tasks/:id/move`              | Move a task to a different column                            |
+| DELETE | `/api/tasks/:id`                   | Delete a task                                                |
 
 ## Deploying it
 
@@ -143,6 +151,7 @@ I deployed the backend on Render (free web service) and the frontend on
 Vercel.
 
 **Backend (Render):**
+
 1. New Web Service → connect the repo → set root directory to `backend`
 2. Build command: `npm install`
 3. Start command: `npm run seed && npm start` (reseeds on every boot, so the
@@ -151,6 +160,7 @@ Vercel.
 4. Instance type: Free
 
 **Frontend (Vercel):**
+
 1. Import the repo, root directory `frontend`
 2. Add env var `VITE_API_URL` pointing at the Render backend, e.g.
    `https://taskflow-backend.onrender.com/api`
